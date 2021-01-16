@@ -43,6 +43,10 @@ void MainWindow::on_btnSelectPath_clicked()
     QString aDir=QFileDialog::getExistingDirectory(this,"选择一个目录",curDir,QFileDialog::ShowDirsOnly);
     ui->textSelectPath->setText(aDir);
 
+    if(aDir == ""){
+        return;
+    }
+
     //清空filePathlist 和 plainTextEdit
     filePathlist.clear();
     ui->plainTextEdit->clear();
