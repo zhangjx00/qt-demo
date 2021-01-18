@@ -82,13 +82,12 @@ void MainWindow::on_btnDele_clicked()
 
     }
 
-
-    QMessageBox::about(NULL, "About", "操作成功");
-
     //刷新显示
     filePathlist.clear();
     ui->plainTextEdit->clear();
     get_filelist( ui->textSelectPath->text() );
+
+    QMessageBox::about(NULL, "About", "操作成功");
 
 }
 
@@ -119,13 +118,11 @@ void MainWindow::on_btnAdd_clicked()
 
     }
 
-    QMessageBox::about(NULL, "About", "操作成功");
-
     //刷新显示
     filePathlist.clear();
     ui->plainTextEdit->clear();
     get_filelist( ui->textSelectPath->text() );
 
-
+    QMessageBox::about(NULL, "About", "操作成功");
 }
 
