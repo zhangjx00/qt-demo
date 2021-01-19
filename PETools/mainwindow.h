@@ -25,11 +25,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QString toHexStr(QByteArray data, int len  );
-    QString peHexStr;
 
 public:
-    void set_header_dos();
+    void set_header_dos(QDataStream* dataStream);
+    QString get_hex_data_stream(QDataStream* dataStream, quint8 byteSize);
 
 private slots:
     void on_btnSelectFile_clicked();

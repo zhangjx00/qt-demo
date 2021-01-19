@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>802</width>
+    <height>737</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,8 +73,8 @@
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>751</width>
-          <height>441</height>
+          <width>761</width>
+          <height>581</height>
          </rect>
         </property>
         <property name="frameShape">
@@ -83,465 +83,302 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <widget class="QWidget" name="widget" native="true">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>30</y>
-           <width>351</width>
-           <height>45</height>
-          </rect>
-         </property>
-         <widget class="QLabel" name="label_2">
-          <property name="geometry">
-           <rect>
-            <x>12</x>
-            <y>12</y>
-            <width>49</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>e_magic</string>
-          </property>
-         </widget>
-         <widget class="QLineEdit" name="e_magic">
-          <property name="geometry">
-           <rect>
-            <x>69</x>
-            <y>12</y>
-            <width>125</width>
-            <height>21</height>
-           </rect>
-          </property>
-         </widget>
-         <widget class="QLabel" name="label_3">
-          <property name="geometry">
-           <rect>
-            <x>210</x>
-            <y>10</y>
-            <width>90</width>
-            <height>18</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>02h  【MZ头】</string>
-          </property>
-         </widget>
-        </widget>
-        <widget class="QLabel" name="label_4">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>90</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_cblp</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_5">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>120</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_cp</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_6">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>160</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_crlc</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_7">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>200</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_cparhdr</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_8">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>240</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_minalloc</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_9">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>280</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_maxalloc</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_10">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>320</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_ss</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_11">
-         <property name="geometry">
-          <rect>
-           <x>30</x>
-           <y>360</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_sp</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_12">
-         <property name="geometry">
-          <rect>
-           <x>40</x>
-           <y>400</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_csum</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_13">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>40</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_ip</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_14">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>80</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_cs</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_15">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>120</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_lfarlc</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_16">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>150</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_ovno</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_17">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>190</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_res</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_18">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>230</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_oemid</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_19">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>270</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_oeminfo</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_20">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>310</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_res2</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_21">
-         <property name="geometry">
-          <rect>
-           <x>380</x>
-           <y>360</y>
-           <width>58</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>e_lfanew</string>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_cblp">
-         <property name="geometry">
-          <rect>
-           <x>100</x>
-           <y>90</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_cp">
-         <property name="geometry">
-          <rect>
-           <x>100</x>
-           <y>120</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_crlc">
-         <property name="geometry">
-          <rect>
-           <x>90</x>
-           <y>160</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_cparhdr">
-         <property name="geometry">
-          <rect>
-           <x>110</x>
-           <y>200</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_minalloc">
-         <property name="geometry">
-          <rect>
-           <x>110</x>
-           <y>240</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_maxalloc">
-         <property name="geometry">
-          <rect>
-           <x>110</x>
-           <y>270</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_ss">
-         <property name="geometry">
-          <rect>
-           <x>90</x>
-           <y>320</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_sp">
-         <property name="geometry">
-          <rect>
-           <x>80</x>
-           <y>360</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_csum">
-         <property name="geometry">
-          <rect>
-           <x>100</x>
-           <y>400</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_ip">
-         <property name="geometry">
-          <rect>
-           <x>440</x>
-           <y>40</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_cs">
-         <property name="geometry">
-          <rect>
-           <x>440</x>
-           <y>80</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_lfarlc">
+        <widget class="QLabel" name="label_3">
          <property name="geometry">
           <rect>
            <x>460</x>
-           <y>120</y>
-           <width>113</width>
-           <height>21</height>
+           <y>10</y>
+           <width>90</width>
+           <height>18</height>
           </rect>
          </property>
-        </widget>
-        <widget class="QLineEdit" name="e_ovno">
-         <property name="geometry">
-          <rect>
-           <x>450</x>
-           <y>150</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
+         <property name="text">
+          <string>【02h MZ头】</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="e_res">
-         <property name="geometry">
-          <rect>
-           <x>450</x>
-           <y>190</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="e_oemid">
+        <widget class="QLabel" name="label_22">
          <property name="geometry">
           <rect>
            <x>460</x>
-           <y>220</y>
-           <width>113</width>
-           <height>21</height>
+           <y>540</y>
+           <width>161</width>
+           <height>16</height>
           </rect>
+         </property>
+         <property name="text">
+          <string>【04h PE文件头地址】*</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="e_oeminfo">
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>460</x>
-           <y>270</y>
-           <width>113</width>
-           <height>21</height>
+           <x>20</x>
+           <y>10</y>
+           <width>101</width>
+           <height>551</height>
           </rect>
          </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>e_magic</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>e_cblp</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>e_cp</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>e_crlc</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>e_cparhdr</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>e_minalloc</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>e_maxalloc</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>e_ss</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>e_sp</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>e_csum</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>e_ip</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>e_cs</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>e_lfarlc</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>e_ovno</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>e_res</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="15" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>e_oemid</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="16" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>e_oeminfo</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="17" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>e_res2</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="18" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>e_lfanew</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-        <widget class="QLineEdit" name="e_res2">
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
-           <x>450</x>
-           <y>310</y>
-           <width>113</width>
-           <height>21</height>
+           <x>130</x>
+           <y>10</y>
+           <width>321</width>
+           <height>551</height>
           </rect>
          </property>
-        </widget>
-        <widget class="QLineEdit" name="e_lfanew">
-         <property name="geometry">
-          <rect>
-           <x>450</x>
-           <y>360</y>
-           <width>113</width>
-           <height>21</height>
-          </rect>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="e_magic"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="e_cblp"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLineEdit" name="e_cp"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLineEdit" name="e_crlc"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLineEdit" name="e_cparhdr"/>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLineEdit" name="e_minalloc"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLineEdit" name="e_maxalloc"/>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLineEdit" name="e_ss"/>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLineEdit" name="e_sp"/>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLineEdit" name="e_csum"/>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLineEdit" name="e_ip"/>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLineEdit" name="e_cs"/>
+          </item>
+          <item row="12" column="0">
+           <widget class="QLineEdit" name="e_lfarlc"/>
+          </item>
+          <item row="13" column="0">
+           <widget class="QLineEdit" name="e_ovno"/>
+          </item>
+          <item row="14" column="0">
+           <widget class="QLineEdit" name="e_res"/>
+          </item>
+          <item row="15" column="0">
+           <widget class="QLineEdit" name="e_oemid"/>
+          </item>
+          <item row="16" column="0">
+           <widget class="QLineEdit" name="e_oeminfo"/>
+          </item>
+          <item row="17" column="0">
+           <widget class="QLineEdit" name="e_res2"/>
+          </item>
+          <item row="18" column="0">
+           <widget class="QLineEdit" name="e_lfanew"/>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>
@@ -554,7 +391,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>802</width>
      <height>22</height>
     </rect>
    </property>
