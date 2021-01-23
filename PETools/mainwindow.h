@@ -41,7 +41,7 @@ public:
 private slots:
     void on_btnSelectFile_clicked();
     void on_btnImageBuffer_clicked();
-    void on_btnNewFile_clicked();
+    void on_btnGenPE_clicked();
 
 private:
     Ui::MainWindow *ui;

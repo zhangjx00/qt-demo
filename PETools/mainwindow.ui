@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>753</width>
-    <height>472</height>
+    <width>852</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -367,6 +367,13 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="btnGenPE">
+                  <property name="text">
+                   <string>生成PE</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="pushButton_2">
                   <property name="text">
                    <string>FOA转RVA</string>
@@ -420,7 +427,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>753</width>
+     <width>852</width>
      <height>22</height>
     </rect>
    </property>

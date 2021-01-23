@@ -50,6 +50,10 @@ void MainWindow::on_btnSelectFile_clicked()
 
     fileByteArray = QByteArray(charArray, fileInfo.size());
 
+    file.close();
+
+
+
     set_header_dos();
     set_header_pe();
     set_header_pe_option();
@@ -57,7 +61,7 @@ void MainWindow::on_btnSelectFile_clicked()
 
     on_btnImageBuffer_clicked();
 
-    file.close();
+
 
 }
 
@@ -314,22 +318,6 @@ void MainWindow::set_header_section(){
 
 }
 
-/*
- * 获取16进制小端字符串
- *
- * pos：开始位置
- * len：长度
- */
-QString MainWindow::get_hex_Little_endian(qint32 pos, qint32 len){
-
-    QByteArray tempArray = fileByteArray.mid(pos,len);
-
-    std::reverse(tempArray.begin(), tempArray.end());
-
-    return tempArray.toHex().toUpper();
-
-}
-
 
 
 //生成image buffer
@@ -370,7 +358,7 @@ void MainWindow::on_btnImageBuffer_clicked()
     //写入文件
     QFile writefile;
     QDataStream stream;
-    QString storepath =  "da.bin";
+    QString storepath =  "/Users/zhangjx/Documents/workspace/qt-demo/image.bin";
 
     writefile.setFileName(storepath);
     writefile.open(QIODevice::WriteOnly);
@@ -380,10 +368,118 @@ void MainWindow::on_btnImageBuffer_clicked()
 
     ui->textImageBuffer->appendPlainText(image_buffer.toHex());
 
+
+    /*
+     * 生成新的exe文件
+     * 1、获取大小，计算文件对齐后大小
+     * 2、拷贝 SizeOfHeader 大小 到 new_file_buffer
+     * 3、循环拷贝区块到 new_file_buffer
+     */
+    int size = 2560;
+    QByteArray new_file_array = QByteArray(size, 0);
+
+
+    //拷贝 SizeOfHeader 大小 到 new_file_buffer
+    new_file_array.insert(0, image_buffer.mid(0, size_of_headers));
+
+
+    //循环拷贝区块到 new_file_buffer
+    //拷贝区块
+    for(int i=0; i < section_number; i++){
+
+        bool ok;
+        int misc =  get_hex_Little_endian(section_header_pos + i*section_size + 8, 4).toInt(&ok, 16);
+        qint32 virtual_address =  get_hex_Little_endian(section_header_pos + i*section_size + 12, 4).toInt(&ok, 16);
+        qint32 pointer_to_raw_data = get_hex_Little_endian(section_header_pos + i*section_size + 20, 4).toInt(&ok, 16);
+
+        QByteArray temp_array = image_buffer.mid(virtual_address, misc);
+
+        new_file_array.insert(pointer_to_raw_data , temp_array);
+    }
+
+    //写入文件
+    QFile new_file;
+    QDataStream new_stream;
+    QString new_path =  "/Users/zhangjx/Documents/workspace/qt-demo/PENEW.exe";
+
+    new_file.setFileName(new_path);
+    new_file.open(QIODevice::WriteOnly);
+    new_stream.setDevice(&new_file);
+    new_stream.writeRawData(new_file_array, size);
+    new_file.close();
+
+
 }
+
 
 //生成新的exe文件
-void MainWindow::on_btnNewFile_clicked()
+void MainWindow::on_btnGenPE_clicked()
 {
 
+    /*
+     * 读取exe
+     * 1、获取大小，计算文件对齐后大小
+     * 2、拷贝 SizeOfHeader 大小 到 new_file_buffer
+     * 3、循环拷贝区块到 new_file_buffer
+     */
+
+    int size = 2560;
+    QByteArray new_file_array = QByteArray(size, 0);
+
+
+
+
+
+    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/PE.exe";
+    QFile file(pathName);
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        QMessageBox::warning(this,"错误","打开失败！！",QMessageBox::Ok,QMessageBox::Ok);
+        return;
+    }
+
+    QFileInfo fileInfo(file);
+
+    //用文本流读取文件
+    QDataStream aStream(&file);
+
+    //windows平台
+    aStream.setByteOrder(QDataStream::LittleEndian);
+
+
+    ui->textDesc->appendPlainText("文件位置：" + pathName );
+    ui->textDesc->appendPlainText("文件大小：" + QString::number( fileInfo.size() ) + "byte");
+
+
+    //读到数组中
+    char charArray[fileInfo.size()];
+//    char* peArray ;
+    aStream.readRawData(charArray, fileInfo.size());
+
+    fileByteArray = QByteArray(charArray, fileInfo.size());
+
+    file.close();
+
+
+
+
 }
+
+
+/*
+ * 获取16进制小端字符串
+ *
+ * pos：开始位置
+ * len：长度
+ */
+QString MainWindow::get_hex_Little_endian(qint32 pos, qint32 len){
+
+    QByteArray tempArray = fileByteArray.mid(pos,len);
+
+    std::reverse(tempArray.begin(), tempArray.end());
+
+    return tempArray.toHex().toUpper();
+
+}
+
+
