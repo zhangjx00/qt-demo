@@ -18,10 +18,10 @@ MainWindow::~MainWindow()
 void MainWindow::on_btnSelectFile_clicked()
 {
 
-//    QString pathName = QFileDialog::getOpenFileName(this,tr("打开一个文件"),QDir::currentPath(),"PE文件(*.exe. *.dll)");
-//    QString pathName = QFileDialog::getOpenFileName(this,tr("打开一个文件"),QDir::currentPath(),"PE文件(*.exe)");
-//    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/WeChat.exe";
-//    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/notepad.exe";
+    //    QString pathName = QFileDialog::getOpenFileName(this,tr("打开一个文件"),QDir::currentPath(),"PE文件(*.exe. *.dll)");
+    //    QString pathName = QFileDialog::getOpenFileName(this,tr("打开一个文件"),QDir::currentPath(),"PE文件(*.exe)");
+    //    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/WeChat.exe";
+    //    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/notepad.exe";
     QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/PE.exe";
     QFile file(pathName);
     if(!file.open(QIODevice::ReadOnly))
@@ -45,7 +45,7 @@ void MainWindow::on_btnSelectFile_clicked()
 
     //读到数组中
     char charArray[fileInfo.size()];
-//    char* peArray ;
+    //    char* peArray ;
     aStream.readRawData(charArray, fileInfo.size());
 
     fileByteArray = QByteArray(charArray, fileInfo.size());
@@ -58,9 +58,7 @@ void MainWindow::on_btnSelectFile_clicked()
     set_header_pe();
     set_header_pe_option();
     set_header_section();
-
-    on_btnImageBuffer_clicked();
-
+    set_directory_export();
 
 
 }
@@ -169,7 +167,8 @@ void MainWindow::set_header_pe(){
 //可选pe头
 void MainWindow::set_header_pe_option(){
 
-
+    bool ok;
+    QString image_base_string;
     if( "010B" == get_hex_Little_endian(file_pos + option_Magic_pos, 2)){
         // 32位结构
         ui->textOption->appendPlainText("32位 Option Header结构：");
@@ -204,6 +203,8 @@ void MainWindow::set_header_pe_option(){
         ui->textOption->appendPlainText(  "LoaderFlags: " + get_hex_Little_endian(file_pos + option_LoaderFlags_pos, 4) );
         ui->textOption->appendPlainText(  "NumberOfRvaAndSizes:" + get_hex_Little_endian(file_pos + option_NumberOfRvaAndSizes_pos, 4) );
 
+        //内存镜像基址
+        image_base = get_hex_Little_endian(file_pos + option_ImageBase_pos, 4).toInt(&ok,16) ;
 
     }else {
 
@@ -239,12 +240,13 @@ void MainWindow::set_header_pe_option(){
         ui->textOption->appendPlainText(  "LoaderFlags: " + get_hex_Little_endian(file_pos + option_LoaderFlags64_pos, 4) );
         ui->textOption->appendPlainText(  "NumberOfRvaAndSizes:" + get_hex_Little_endian(file_pos + option_NumberOfRvaAndSizes64_pos, 4) );
 
+        //内存镜像基址
+        image_base = get_hex_Little_endian(file_pos + option_ImageBase64_pos, 4).toInt(&ok,16) ;
 
     }
 
 
     //保存 header大小
-    bool ok;
     size_of_headers = get_hex_Little_endian(file_pos + option_SizeOfHeaders_pos, 4).toInt(&ok,16) ;
     ui->textDesc->appendPlainText("文件头大小：" + QString::number( size_of_headers) );
 
@@ -257,7 +259,11 @@ void MainWindow::set_header_pe_option(){
 
     //内存对齐大小
     section_alignment = get_hex_Little_endian(file_pos + option_SectionAlignment_pos, 4).toInt(&ok,16) ;
-    ui->textDesc->appendPlainText("内存对齐大小" + QString::number( section_alignment) );
+    ui->textDesc->appendPlainText("内存对齐大小：" + QString::number( section_alignment) );
+
+    //内存镜像基址
+    ui->textDesc->appendPlainText("内存镜像基址：" + QString::number( image_base) );
+
 
 
 }
@@ -411,60 +417,105 @@ void MainWindow::on_btnImageBuffer_clicked()
 
 }
 
+void MainWindow::set_directory_export(){
 
-//生成新的exe文件
-void MainWindow::on_btnGenPE_clicked()
-{
+    if( "010B" == get_hex_Little_endian(file_pos + option_Magic_pos, 2)){
+        // 32位结构
+        ui->textExportTable->appendPlainText("32位导出表：");
+        ui->textExportTable->appendPlainText("导出表的RVA VirtualAddress：" + get_hex_Little_endian(0x78, 0x4));
+        ui->textExportTable->appendPlainText("数据库长度 size：" + get_hex_Little_endian(0x7c, 0x4));
 
-    /*
-     * 读取exe
-     * 1、获取大小，计算文件对齐后大小
-     * 2、拷贝 SizeOfHeader 大小 到 new_file_buffer
-     * 3、循环拷贝区块到 new_file_buffer
-     */
+    }else{
+        // 32位结构
+        ui->textExportTable->appendPlainText("32位导出表：");
+        ui->textExportTable->appendPlainText("导出表的RVA VirtualAddress：" + get_hex_Little_endian(0x88, 0x4));
+        ui->textExportTable->appendPlainText("数据库长度 size：" + get_hex_Little_endian(0x8c, 0x4));
 
-    int size = 2560;
-    QByteArray new_file_array = QByteArray(size, 0);
-
-
-
-
-
-    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/PE.exe";
-    QFile file(pathName);
-    if(!file.open(QIODevice::ReadOnly))
-    {
-        QMessageBox::warning(this,"错误","打开失败！！",QMessageBox::Ok,QMessageBox::Ok);
-        return;
     }
-
-    QFileInfo fileInfo(file);
-
-    //用文本流读取文件
-    QDataStream aStream(&file);
-
-    //windows平台
-    aStream.setByteOrder(QDataStream::LittleEndian);
-
-
-    ui->textDesc->appendPlainText("文件位置：" + pathName );
-    ui->textDesc->appendPlainText("文件大小：" + QString::number( fileInfo.size() ) + "byte");
-
-
-    //读到数组中
-    char charArray[fileInfo.size()];
-//    char* peArray ;
-    aStream.readRawData(charArray, fileInfo.size());
-
-    fileByteArray = QByteArray(charArray, fileInfo.size());
-
-    file.close();
-
-
 
 
 }
 
+
+QString MainWindow::foa_to_rva(qint32 foa_value){
+
+    /*
+     * 1、循环块区，当 PointerToRawData + Misc < 地址 < PointerToRawData  + Misc，获取区块序号。获取该区块的 PointerToRawData
+     * 2、VirtualAddress + misc 等于 rva
+     */
+
+    qint8 section_size = 40;
+    bool ok;
+
+    for(int i=0; i < section_number; i++){
+
+        //Misc
+        QByteArray Misc_array =  fileByteArray.mid(section_header_pos + i*section_size + 8, 4);
+        std::reverse(Misc_array.begin(), Misc_array.end());
+        qint32 misc = Misc_array.toHex().toInt(&ok, 16);
+
+        //PointerToRawData
+        QByteArray PointerToRawData_array =  fileByteArray.mid(section_header_pos + i*section_size + 20, 4);
+        std::reverse(PointerToRawData_array.begin(), PointerToRawData_array.end());
+        qint32 PointerToRawData = PointerToRawData_array.toHex().toInt(&ok, 16);
+
+        if( foa_value >=  PointerToRawData && foa_value <=  (PointerToRawData + misc)) {
+            //获取值
+            //VirtualAddress
+            QByteArray VirtualAddress_array =  fileByteArray.mid(section_header_pos + i*section_size + 12, 4);
+            std::reverse(VirtualAddress_array.begin(), VirtualAddress_array.end());
+
+            qint32 addr = VirtualAddress_array.toHex().toInt(&ok, 16) + (foa_value-PointerToRawData);
+            return  QString::number(addr, 16);
+        }
+
+    }
+
+    return "0";
+
+
+}
+
+QString MainWindow::rva_to_foa(qint32 rva_value){
+
+
+    /*
+     * 1、循环块区，当 VirtualAddress + Misc < 地址 < VirtualAddress + Misc，获取区块序号。获取该区块的 PointerToRawData
+     * 2、PointerToRawData + misc 等于 foa
+     */
+
+    qint8 section_size = 40;
+    bool ok;
+
+    for(int i=0; i < section_number; i++){
+
+        //Misc
+        QByteArray Misc_array =  fileByteArray.mid(section_header_pos + i*section_size + 8, 4);
+        std::reverse(Misc_array.begin(), Misc_array.end());
+        qint32 misc = Misc_array.toHex().toInt(&ok, 16);
+
+
+        //VirtualAddress
+        QByteArray VirtualAddress_array =  fileByteArray.mid(section_header_pos + i*section_size + 12, 4);
+        std::reverse(VirtualAddress_array.begin(), VirtualAddress_array.end());
+        qint32 VirtualAddress = VirtualAddress_array.toHex().toInt(&ok, 16);
+
+
+        if( rva_value >=  VirtualAddress && rva_value <=  (VirtualAddress + misc)){
+
+            //PointerToRawData
+            QByteArray PointerToRawData_array =  fileByteArray.mid(section_header_pos + i*section_size + 20, 4);
+            std::reverse(PointerToRawData_array.begin(), PointerToRawData_array.end());
+
+            qint32 addr = PointerToRawData_array.toHex().toInt(&ok, 16) + (rva_value-VirtualAddress);
+            return  QString::number(addr, 16);
+        }
+
+    }
+
+    return "0";
+
+}
 
 /*
  * 获取16进制小端字符串
@@ -483,3 +534,26 @@ QString MainWindow::get_hex_Little_endian(qint32 pos, qint32 len){
 }
 
 
+
+void MainWindow::on_btnFoa2Rva_clicked()
+{
+
+    QString foa = ui->textFOA->text().trimmed();
+    bool ok;
+
+    qint32 foa_value = foa.toInt(&ok, 16);
+
+    ui->textRVA->setText( foa_to_rva(foa_value)) ;
+
+}
+
+void MainWindow::on_btnRva2Foa_clicked()
+{
+    QString rva = ui->textRVA->text().trimmed();
+    bool ok;
+
+    qint32 rva_value = rva.toInt(&ok, 16);
+
+    ui->textFOA->setText( rva_to_foa(rva_value)) ;
+
+}

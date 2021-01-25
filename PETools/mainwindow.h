@@ -31,8 +31,14 @@ public:
     void set_header_pe();
     void set_header_pe_option();
     void set_header_section();
+    void set_directory_export();
 
     QString get_hex_Little_endian(qint32 pos, qint32 len);
+
+
+    QString foa_to_rva(qint32 foa_value);
+    QString rva_to_foa(qint32 rva_value);
+
 
     //存储pe文件
     QByteArray fileByteArray;
@@ -41,7 +47,11 @@ public:
 private slots:
     void on_btnSelectFile_clicked();
     void on_btnImageBuffer_clicked();
-    void on_btnGenPE_clicked();
+
+
+    void on_btnFoa2Rva_clicked();
+
+    void on_btnRva2Foa_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -169,6 +179,10 @@ public:
 
     //pe文件再内存中大小，未对其之前的大小
     qint32 size_of_image;
+
+    //内存镜像基址
+    qint32 image_base;
+
 
     //快表位置
     qint32 section_header_pos;

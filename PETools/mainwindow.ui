@@ -367,31 +367,24 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="btnGenPE">
-                  <property name="text">
-                   <string>生成PE</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_2">
+                 <widget class="QPushButton" name="btnFoa2Rva">
                   <property name="text">
                    <string>FOA转RVA</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="btnRva2Foa">
                   <property name="text">
                    <string>RVA转FOA</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit"/>
+                 <widget class="QLineEdit" name="textFOA"/>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_2"/>
+                 <widget class="QLineEdit" name="textRVA"/>
                 </item>
                </layout>
               </widget>
@@ -410,6 +403,38 @@
                 </item>
                </layout>
               </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabExportTable">
+            <attribute name="title">
+             <string>Export Table</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_10">
+             <item>
+              <widget class="QFrame" name="frame_7">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_11">
+                <item>
+                 <widget class="QPlainTextEdit" name="textExportTable"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_3">
+            <attribute name="title">
+             <string>Import Table</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_12">
+             <item>
+              <widget class="QPlainTextEdit" name="textImportable"/>
              </item>
             </layout>
            </widget>
