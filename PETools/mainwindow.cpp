@@ -22,7 +22,9 @@ void MainWindow::on_btnSelectFile_clicked()
     //    QString pathName = QFileDialog::getOpenFileName(this,tr("打开一个文件"),QDir::currentPath(),"PE文件(*.exe)");
     //    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/WeChat.exe";
     //    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/notepad.exe";
-    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/PE.exe";
+    QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/mydll.dll";
+
+    //QString pathName = "/Users/zhangjx/Documents/workspace/qt-demo/PE.exe";
     QFile file(pathName);
     if(!file.open(QIODevice::ReadOnly))
     {
@@ -325,7 +327,6 @@ void MainWindow::set_header_section(){
 }
 
 
-
 //生成image buffer
 void MainWindow::on_btnImageBuffer_clicked()
 {
@@ -417,27 +418,118 @@ void MainWindow::on_btnImageBuffer_clicked()
 
 }
 
+
+//导出表
 void MainWindow::set_directory_export(){
+
+    /*
+     *
+     typedef struct _IMAGE_EXPORT_DIRECTORY
+    {
+        DWORD Characteristics; //属性 0x0
+        DWORD TimeDateStamp; //时期邮戳 0x4
+        WORD MajorVersion;  0x8
+        WORD MinorVersion;  0xA
+        DWORD Name;//模块名字 RVA   0xC
+        DWORD Base;//基数，加上序书就是函数地址数组的索引值    0x10
+        DWORD NumberOfFunctions;//函数个数  0x14
+        DWORD NumberOfNames;//函数名字（有的有名字，有的没名字）0x18
+        DWORD AddressOfFunctions;//RVA from base of image   0x1c
+        DWORD AddressOfNames;//RVA from base of image   0x20
+        DWORD AddressOfNameOrdinals;//RVA from base of image    0x24
+    } IMAGE_EXPORT_DIRECTORY, *PIMAGE_EXPORT_DIRECTORY;
+     */
+
+
+    bool ok;
+
+    QString VirtualAddress;
+
 
     if( "010B" == get_hex_Little_endian(file_pos + option_Magic_pos, 2)){
         // 32位结构
         ui->textExportTable->appendPlainText("32位导出表：");
-        ui->textExportTable->appendPlainText("导出表的RVA VirtualAddress：" + get_hex_Little_endian(0x78, 0x4));
-        ui->textExportTable->appendPlainText("数据库长度 size：" + get_hex_Little_endian(0x7c, 0x4));
+        VirtualAddress = get_hex_Little_endian(file_pos + 0x78, 0x4);
+        ui->textExportTable->appendPlainText("导出表的地址 RVA：" + VirtualAddress );
+        ui->textExportTable->appendPlainText("数据长度 size：" + get_hex_Little_endian(file_pos + 0x7c, 0x4));
+
+
 
     }else{
-        // 32位结构
+        // 64位结构
         ui->textExportTable->appendPlainText("32位导出表：");
         ui->textExportTable->appendPlainText("导出表的RVA VirtualAddress：" + get_hex_Little_endian(0x88, 0x4));
-        ui->textExportTable->appendPlainText("数据库长度 size：" + get_hex_Little_endian(0x8c, 0x4));
+        ui->textExportTable->appendPlainText("数据长度 size：" + get_hex_Little_endian(0x8c, 0x4));
 
     }
+
+    if( VirtualAddress.toInt(&ok, 16) == 0){
+        return;
+    }
+
+    //三张表
+
+    //rva转foa
+    qint32 foa_value = rva_to_foa( VirtualAddress.toInt(&ok, 16));
+    ui->textExportTable->appendPlainText("导出表偏移：" + QString::number(foa_value, 16) );
+
+
+    //名字
+    //QString name_addr_str = get_hex_Little_endian(foa_value + 0xC, 0x4);
+    //ui->textExportTable->appendPlainText("名称：" + get_hex_Little_endian(file_pos + 0x84, 0x4));
+
+
+    //基数
+    qint32  base =  get_hex_Little_endian(foa_value + 0x10, 0x4).toInt(&ok, 16);
+    ui->textExportTable->appendPlainText("基数：" + QString::number( base, 16) );
+
+    //函数个数
+    qint32  number_of_functions =  get_hex_Little_endian(foa_value + 0x14, 0x4).toInt(&ok, 16);
+    ui->textExportTable->appendPlainText("函数个数" + QString::number(number_of_functions, 16) );
+
+
+
+
+    //address Of function 导出函数地址表RVA
+    QString address_of_function_string = get_hex_Little_endian(foa_value + 0x1c, 0x4);
+    qint32 address_of_function = address_of_function_string.toInt(&ok, 16);
+    qint32 foa_address_of_function = rva_to_foa(address_of_function);
+    ui->textExportTable->appendPlainText("导出函数地址表：" + address_of_function_string);
+    ui->textExportTable->appendPlainText("导出函数地址表 FOA：" + QString::number(foa_address_of_function,16));
+    for(int i=0; i< number_of_functions; i++){
+        ui->textExportTable->appendPlainText("导出函数地址：" +  get_hex_Little_endian(foa_address_of_function + i*4, 0x4) );
+    }
+
+    ui->textExportTable->appendPlainText("-------------"  );
+
+    //address of name 导出函数名称表RVA
+    QString address_of_name_string = get_hex_Little_endian(foa_value + 0x20, 0x4);
+    qint32 address_of_name = address_of_name_string.toInt(&ok,16);
+    qint32 foa_address_of_name = rva_to_foa(address_of_name);
+    ui->textExportTable->appendPlainText("导出函数名称表：" + address_of_name_string);
+    for(int i=0; i< number_of_functions; i++){
+        ui->textExportTable->appendPlainText("导出函数名称 RVA：" +  get_hex_Little_endian(foa_address_of_name + i*4, 0x4) );
+
+    }
+
+    ui->textExportTable->appendPlainText("-------------"  );
+
+
+    //address of name ordinal 导出函数序号表RVA
+    QString address_of_name_ordinal_string = get_hex_Little_endian(foa_value + 0x24, 0x4);
+    qint32 address_of_name_ordinal = address_of_name_ordinal_string.toInt(&ok,16);
+    qint32 foa_address_of_name_ordinal = rva_to_foa(address_of_name_ordinal);
+    ui->textExportTable->appendPlainText("导出函数序号表：" +  address_of_name_ordinal_string );
+    for(int i=0; i< number_of_functions; i++){
+        ui->textExportTable->appendPlainText("导出函数序号：" +  get_hex_Little_endian(foa_address_of_name_ordinal + i*2, 0x2) );
+    }
+
 
 
 }
 
 
-QString MainWindow::foa_to_rva(qint32 foa_value){
+qint32 MainWindow::foa_to_rva(qint32 foa_value){
 
     /*
      * 1、循环块区，当 PointerToRawData + Misc < 地址 < PointerToRawData  + Misc，获取区块序号。获取该区块的 PointerToRawData
@@ -466,17 +558,18 @@ QString MainWindow::foa_to_rva(qint32 foa_value){
             std::reverse(VirtualAddress_array.begin(), VirtualAddress_array.end());
 
             qint32 addr = VirtualAddress_array.toHex().toInt(&ok, 16) + (foa_value-PointerToRawData);
-            return  QString::number(addr, 16);
+//            return  QString::number(addr, 16);
+            return addr;
         }
 
     }
 
-    return "0";
+    return 0;
 
 
 }
 
-QString MainWindow::rva_to_foa(qint32 rva_value){
+qint32 MainWindow::rva_to_foa(qint32 rva_value){
 
 
     /*
@@ -508,12 +601,13 @@ QString MainWindow::rva_to_foa(qint32 rva_value){
             std::reverse(PointerToRawData_array.begin(), PointerToRawData_array.end());
 
             qint32 addr = PointerToRawData_array.toHex().toInt(&ok, 16) + (rva_value-VirtualAddress);
-            return  QString::number(addr, 16);
+//            return  QString::number(addr, 16);
+            return addr;
         }
 
     }
 
-    return "0";
+    return 0;
 
 }
 
@@ -543,7 +637,7 @@ void MainWindow::on_btnFoa2Rva_clicked()
 
     qint32 foa_value = foa.toInt(&ok, 16);
 
-    ui->textRVA->setText( foa_to_rva(foa_value)) ;
+    ui->textRVA->setText( QString::number(foa_to_rva(foa_value),16 )) ;
 
 }
 
@@ -554,6 +648,6 @@ void MainWindow::on_btnRva2Foa_clicked()
 
     qint32 rva_value = rva.toInt(&ok, 16);
 
-    ui->textFOA->setText( rva_to_foa(rva_value)) ;
+    ui->textFOA->setText( QString::number(rva_to_foa(rva_value), 16) ) ;
 
 }

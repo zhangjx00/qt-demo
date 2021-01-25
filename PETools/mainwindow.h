@@ -36,8 +36,8 @@ public:
     QString get_hex_Little_endian(qint32 pos, qint32 len);
 
 
-    QString foa_to_rva(qint32 foa_value);
-    QString rva_to_foa(qint32 rva_value);
+    qint32 foa_to_rva(qint32 foa_value);
+    qint32 rva_to_foa(qint32 rva_value);
 
 
     //存储pe文件
