@@ -32,6 +32,7 @@ public:
     void set_header_pe_option();
     void set_header_section();
     void set_directory_export();
+    void set_directory_relocation();
 
     QString get_hex_Little_endian(qint32 pos, qint32 len);
 

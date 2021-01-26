@@ -61,6 +61,7 @@ void MainWindow::on_btnSelectFile_clicked()
     set_header_pe_option();
     set_header_section();
     set_directory_export();
+    set_directory_relocation();
 
 
 }
@@ -432,7 +433,7 @@ void MainWindow::set_directory_export(){
         WORD MinorVersion;  0xA
         DWORD Name;//模块名字 RVA   0xC
         DWORD Base;//基数，加上序书就是函数地址数组的索引值    0x10
-        DWORD NumberOfFunctions;//函数个数  0x14
+        DWORD NumberOfFunctions;//函数个数  0x14    最大值-最小值+1，不一定准确
         DWORD NumberOfNames;//函数名字（有的有名字，有的没名字）0x18
         DWORD AddressOfFunctions;//RVA from base of image   0x1c
         DWORD AddressOfNames;//RVA from base of image   0x20
@@ -446,29 +447,30 @@ void MainWindow::set_directory_export(){
     QString VirtualAddress;
 
 
+    //默认32位
+    qint32 start_pos = 0x78;
     if( "010B" == get_hex_Little_endian(file_pos + option_Magic_pos, 2)){
         // 32位结构
-        ui->textExportTable->appendPlainText("32位导出表：");
-        VirtualAddress = get_hex_Little_endian(file_pos + 0x78, 0x4);
-        ui->textExportTable->appendPlainText("导出表的地址 RVA：" + VirtualAddress );
-        ui->textExportTable->appendPlainText("数据长度 size：" + get_hex_Little_endian(file_pos + 0x7c, 0x4));
-
-
+        ui->textExportTable->appendPlainText("********** 文件格式是32位 **********\n" );
 
     }else{
         // 64位结构
-        ui->textExportTable->appendPlainText("32位导出表：");
-        ui->textExportTable->appendPlainText("导出表的RVA VirtualAddress：" + get_hex_Little_endian(0x88, 0x4));
-        ui->textExportTable->appendPlainText("数据长度 size：" + get_hex_Little_endian(0x8c, 0x4));
+        ui->textExportTable->appendPlainText("********** 文件格式是64位 **********\n" );
+        start_pos = 0x88;
 
     }
+
+
+    VirtualAddress = get_hex_Little_endian(file_pos + start_pos, 0x4);
+    ui->textExportTable->appendPlainText("导出表的地址 RVA：" + VirtualAddress );
+    ui->textExportTable->appendPlainText("数据长度 size：" + get_hex_Little_endian(file_pos + start_pos + 0x4, 0x4));
 
     if( VirtualAddress.toInt(&ok, 16) == 0){
         return;
     }
 
-    //三张表
 
+    //打印三张表
     //rva转foa
     qint32 foa_value = rva_to_foa( VirtualAddress.toInt(&ok, 16));
     ui->textExportTable->appendPlainText("导出表偏移：" + QString::number(foa_value, 16) );
@@ -527,6 +529,74 @@ void MainWindow::set_directory_export(){
 
 
 }
+
+//重定位表
+void MainWindow::set_directory_relocation(){
+
+    bool ok;
+
+    QString VirtualAddress;
+    qint32 foa_VirtualAddress;
+
+    //默认32位
+    qint32 start_pos = 0xA0;
+
+    if( "010B" == get_hex_Little_endian(file_pos + option_Magic_pos, 2)){
+        // 32位结构
+        ui->textRelocation->appendPlainText("********** 文件格式是32位 **********\n" );
+
+    }else{
+        // 64位结构
+        ui->textRelocation->appendPlainText("********** 文件格式是64位 **********\n" );
+        start_pos = 0xB0;
+
+    }
+
+    VirtualAddress = get_hex_Little_endian(file_pos + start_pos, 0x4);
+    foa_VirtualAddress = rva_to_foa( VirtualAddress.toInt(&ok,16));
+    ui->textRelocation->appendPlainText("重定位表 RVA：" + VirtualAddress );
+    ui->textRelocation->appendPlainText("重定位表 FOA：" + QString::number(foa_VirtualAddress, 16) );
+    ui->textRelocation->appendPlainText("重定位表 size：" + get_hex_Little_endian(file_pos + start_pos, 0x4));
+
+
+    qint32 i = 0;
+    qint32 block_pos = 0;
+    // 解析重定位快
+    QString BASE_RELOCATION = "1";
+    QString SizeOfBlock = "1";
+
+
+    block_pos = foa_VirtualAddress;
+    while ( BASE_RELOCATION != "00000000" ) {
+
+        BASE_RELOCATION = get_hex_Little_endian(block_pos, 0x4);
+
+        //不打印最后一个
+        if( BASE_RELOCATION == "00000000" ){
+            return;
+        }
+
+        ui->textRelocation->appendPlainText("---------------------" );
+        ui->textRelocation->appendPlainText("第" + QString::number(i+1, 16) +"个Block地址：" + BASE_RELOCATION );
+        SizeOfBlock = get_hex_Little_endian(block_pos + 0x4, 0x4);
+        ui->textRelocation->appendPlainText("第" + QString::number(i+1, 16) +"个Block大小：" + SizeOfBlock );
+
+        qint32 block_number = (SizeOfBlock.toInt(&ok, 16) - 0x8 )/2;
+        ui->textRelocation->appendPlainText("数量：" + QString::number(block_number,16) );
+
+        for(int j=0;j<block_number;j++){
+            QString value = get_hex_Little_endian(block_pos + 0x8 + 2*j, 0x2);
+            ui->textRelocation->appendPlainText(value);
+
+        }
+
+        block_pos = block_pos + SizeOfBlock.toInt(&ok, 16);
+        i++;
+
+    }
+
+}
+
 
 
 qint32 MainWindow::foa_to_rva(qint32 foa_value){

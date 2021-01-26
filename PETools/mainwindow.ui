@@ -108,7 +108,7 @@
          <item>
           <widget class="QTabWidget" name="tabWidget">
            <property name="currentIndex">
-            <number>5</number>
+            <number>7</number>
            </property>
            <widget class="QWidget" name="tabDesc">
             <attribute name="title">
@@ -422,6 +422,28 @@
                <layout class="QVBoxLayout" name="verticalLayout_11">
                 <item>
                  <widget class="QPlainTextEdit" name="textExportTable"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tabRelocation">
+            <attribute name="title">
+             <string>重定位表</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <item>
+              <widget class="QFrame" name="frame_8">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_14">
+                <item>
+                 <widget class="QPlainTextEdit" name="textRelocation"/>
                 </item>
                </layout>
               </widget>
