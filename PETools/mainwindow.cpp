@@ -533,6 +533,25 @@ void MainWindow::set_directory_export(){
 //重定位表
 void MainWindow::set_directory_relocation(){
 
+
+    /*
+    typedef struct _IMAGE_DATA_DIRECTORY {
+        DWORD   VirtualAddress;
+        DWORD   Size;
+    } IMAGE_DATA_DIRECTORY, *PIMAGE_DATA_DIRECTORY;
+
+
+    typedef struct _IMAGE_BASE_RELOCATION {
+        DWORD   VirtualAddress;
+        DWORD   SizeOfBlock;
+    } IMAGE_BASE_RELOCATION;
+    typedef IMAGE_BASE_RELOCATION ，* PIMAGE_BASE_RELOCATION;
+
+     */
+
+
+
+
     bool ok;
 
     QString VirtualAddress;
@@ -571,7 +590,7 @@ void MainWindow::set_directory_relocation(){
 
         BASE_RELOCATION = get_hex_Little_endian(block_pos, 0x4);
 
-        //不打印最后一个
+        //不打印结束标识
         if( BASE_RELOCATION == "00000000" ){
             return;
         }
@@ -581,6 +600,7 @@ void MainWindow::set_directory_relocation(){
         SizeOfBlock = get_hex_Little_endian(block_pos + 0x4, 0x4);
         ui->textRelocation->appendPlainText("第" + QString::number(i+1, 16) +"个Block大小：" + SizeOfBlock );
 
+        //计算数量  = ( [SizeOfBlock] - VirtualAddress宽度 - SizeOfBlock宽度 ) / 2
         qint32 block_number = (SizeOfBlock.toInt(&ok, 16) - 0x8 )/2;
         ui->textRelocation->appendPlainText("数量：" + QString::number(block_number,16) );
 
